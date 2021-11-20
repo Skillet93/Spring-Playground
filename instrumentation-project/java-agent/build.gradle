@@ -1,0 +1,29 @@
+plugins {
+    id 'java'
+}
+
+group 'com.company'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+
+jar {
+    archiveName("java-agent.jar")
+    //fat jar
+    from {configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }}
+
+    manifest {
+        attributes(
+                'Premain-Class' : 'com.company.agent.Agent',
+                'Can-Redefine-Classes' : 'true',
+                'Can-Retransform-Classes' : 'true'
+        )
+    }
+}
+
+dependencies {
+    implementation 'net.bytebuddy:byte-buddy:1.12.1'
+}
